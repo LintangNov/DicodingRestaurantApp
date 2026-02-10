@@ -10,9 +10,19 @@ class RestaurantSearchProvider extends ChangeNotifier {
   ResultState<RestaurantListResponse> _state = ResultStateInitial();
   ResultState<RestaurantListResponse> get state => _state;
 
+  String _query = "";
+  String get query => _query;
+
 
   Future<void> fetchSearchRestaurant(String query) async {
     try {
+      _query = query;
+
+      if (query.isEmpty) {
+        _state = ResultStateInitial();
+        notifyListeners();
+        return;
+      }
       _state = ResultStateLoading();
       notifyListeners();
 
@@ -28,5 +38,11 @@ class RestaurantSearchProvider extends ChangeNotifier {
       _state = ResultStateError("Gagal memuat pencarian restoran: $e");
       notifyListeners();
     }
+  }
+
+  void clearSearch() {
+    _query = "";
+    _state = ResultStateInitial();
+    notifyListeners();
   }
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/provider/home_category_provider.dart';
 import 'common/styles.dart';
 import 'provider/restaurant_detail_provider.dart';
 import 'provider/restaurant_list_provider.dart';
 import 'provider/restaurant_search_provider.dart';
+import 'provider/favorite_provider.dart';
 import 'data/api/api_service.dart';
 import 'screen/home_screen.dart';
 import 'screen/search_screen.dart';
@@ -33,6 +35,8 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               RestaurantSearchProvider(context.read<ApiService>()),
         ),
+        ChangeNotifierProvider(create: (context) => FavoriteProvider()),
+        ChangeNotifierProvider(create: (context) => HomeCategoryProvider(),)
       ],
       child: MaterialApp(
         title: 'Restaurant App',

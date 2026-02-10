@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurant_app/data/model/restaurant_list.dart';
-import 'package:restaurant_app/screen/detail_screen.dart';
-import 'package:restaurant_app/screen/search_screen.dart';
+import 'package:restaurant_app/provider/favorite_provider.dart';
+import 'package:restaurant_app/provider/home_category_provider.dart';
+import 'package:restaurant_app/screen/home_screen_widgets.dart';
 import '../provider/restaurant_list_provider.dart';
 import '../static/result_state.dart';
-import '../common/styles.dart';
-import '';
+
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home_screen';
@@ -17,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final int _selectedCategoryIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -29,107 +29,61 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Column(children: [const Text("Restaurant")]),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, SearchScreen.routeName);
-            },
-            icon: const Icon(Icons.search),
-          ),
-        ],
-      ),
-      body: Consumer<RestaurantListProvider>(
-        builder: (context, provider, child) {
-          final state = provider.state;
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildHeader(context),
+            const SizedBox(height: 16),
+            buildCategoryChips(context, _selectedCategoryIndex),
+            const SizedBox(height: 16),
+            Expanded(
+              child: Consumer3<HomeCategoryProvider,FavoriteProvider, RestaurantListProvider>(
+                builder: (context, categoryProvider, favoriteProvider, listProvider, child) {
+                  final state = listProvider.state;
 
-          if (state is ResultStateLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is ResultStateError) {
-            return Center(
-              child: Text("Error: ${(state as ResultStateError).error}"),
-            );
-          } else if (state is ResultStateSuccess) {
-            final restaurants = (state as ResultStateSuccess).data.restaurants;
-
-            return ListView.builder(
-              itemCount: restaurants.length,
-              itemBuilder: (context, index) {
-                final restaurant = restaurants[index];
-                return ListTile(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 8.0,
-                  ),
-                  leading: Hero(
-                    tag: restaurant.pictureId,
-                    child: Container(
-                      width: 100,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        image: DecorationImage(
-                          image: NetworkImage(
-                            "https://restaurant-api.dicoding.dev/images/small/${restaurant.pictureId}",
-                          ),
-                          fit: BoxFit.cover,
-                        ),
+                  if (state is ResultStateLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is ResultStateError) {
+                    return Center(
+                      child: Text(
+                        "Error: ${(state as ResultStateError).error}",
                       ),
-                    ),
-                  ),
-                  title: Text(
-                    restaurant.name,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 4,),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.location_on,
-                            size: 16,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            restaurant.city,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                      ],
-                      ),
-                      const SizedBox(height: 4,),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.star,
-                            size: 16,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                          const SizedBox(width: 4,),
-                          Text("${restaurant.rating}",
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      DetailScreen.routeName,
-                      arguments: restaurant.id,
                     );
-                  },
-                );
-              },
-            );
-          } else {
-            return const Center(child: Text("Memuat data....."));
-          }
-        },
+                  } else if (state is ResultStateSuccess) {
+                    final restaurants =
+                        (state as ResultStateSuccess).data.restaurants;
+
+                    final displayedRestaurants = categoryProvider.index == 1
+                        ? restaurants
+                            .where((r) => favoriteProvider.isFavorite(r.id))
+                            .toList()
+                        : restaurants;
+
+                    if (displayedRestaurants.isEmpty && categoryProvider.index == 1) {
+                      return const Center(
+                        child: Text("No favorite restaurants found."),
+                      );
+                    }
+
+                    return ListView.builder(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 8,
+                      ),
+                      itemCount: displayedRestaurants.length,
+                      itemBuilder: (context, index) {
+                        return buildRestaurantItem(context, displayedRestaurants[index], favoriteProvider);
+                      },
+                    );
+                  } else {
+                    return const Center(child: Text("Loading data...."));
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

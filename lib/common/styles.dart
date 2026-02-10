@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-const Color primaryColor = Color.fromARGB(255, 151, 151, 151);
-const Color secondaryColor = Color(0xFF6B38FB);
+const Color primaryColor = Color(0xFF6B38FB);
+const Color secondaryColor = Color(0xFF9D76FC);
 const Color darkColor = Color(0xFF121212);
+const Color darkSurfaceColor = Color(0xFF1E1E1E);
 
 final TextTheme myTextTheme = TextTheme(
   displayLarge: GoogleFonts.poppins(fontSize: 57, fontWeight: FontWeight.bold),
@@ -23,30 +24,42 @@ final TextTheme myTextTheme = TextTheme(
 
 ThemeData lightTheme = ThemeData(
   colorScheme: ColorScheme.fromSeed(
-    seedColor: secondaryColor,
+    seedColor: primaryColor,
     primary: primaryColor,
     secondary: secondaryColor,
-    brightness: Brightness.light, 
+    surface: Colors.white, 
+    onSurface: Colors.black, 
+    brightness: Brightness.light,
   ),
   textTheme: myTextTheme,
   useMaterial3: true,
-  scaffoldBackgroundColor: Colors.white,
+  scaffoldBackgroundColor: Colors.grey.shade50,
+  cardColor: Colors.white, 
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.white,
     foregroundColor: Colors.black,
     elevation: 0,
-  )
+  ),
 );
 
 ThemeData darkTheme = ThemeData(
-  colorScheme: ColorScheme.fromSeed(seedColor: secondaryColor,
-  primary: darkColor,
-  secondary: secondaryColor,
-  brightness: Brightness.dark,
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: primaryColor,
+    primary: primaryColor, 
+    secondary: secondaryColor,
+    surface: darkSurfaceColor,
+    onSurface: Colors.white, 
+    background: darkColor,
+    onBackground: Colors.white,
+    brightness: Brightness.dark,
   ),
-  textTheme: myTextTheme,
+  textTheme: myTextTheme.apply(
+    bodyColor: Colors.white, 
+    displayColor: Colors.white,
+  ),
   useMaterial3: true,
   scaffoldBackgroundColor: darkColor,
+  cardColor: darkSurfaceColor, 
   appBarTheme: const AppBarTheme(
     backgroundColor: darkColor,
     foregroundColor: Colors.white,
