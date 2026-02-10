@@ -5,6 +5,7 @@ import 'package:restaurant_app/screen/detail_screen.dart';
 import 'package:restaurant_app/screen/search_screen.dart';
 import '../provider/restaurant_list_provider.dart';
 import '../static/result_state.dart';
+import '../common/styles.dart';
 import '';
 
 class HomeScreen extends StatefulWidget {
@@ -25,13 +26,19 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Restaurant App"),
-        actions: [IconButton(onPressed: () {
-          Navigator.pushNamed(context, SearchScreen.routeName);
-        }, icon: const Icon(Icons.search))],
+        title: Column(children: [const Text("Restaurant")]),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, SearchScreen.routeName);
+            },
+            icon: const Icon(Icons.search),
+          ),
+        ],
       ),
       body: Consumer<RestaurantListProvider>(
         builder: (context, provider, child) {
@@ -51,14 +58,63 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (context, index) {
                 final restaurant = restaurants[index];
                 return ListTile(
-                  title: Text(restaurant.name),
-                  subtitle: Text(restaurant.city),
-                  leading: Image.network(
-                    "https://restaurant-api.dicoding.dev/images/small/${restaurant.pictureId}",
-                    width: 100,
-                    fit: BoxFit.cover,
-                    errorBuilder: (ctx, error, StackTrace) =>
-                        const Icon(Icons.error),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 8.0,
+                  ),
+                  leading: Hero(
+                    tag: restaurant.pictureId,
+                    child: Container(
+                      width: 100,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            "https://restaurant-api.dicoding.dev/images/small/${restaurant.pictureId}",
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                    restaurant.name,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 4,),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            restaurant.city,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                      ],
+                      ),
+                      const SizedBox(height: 4,),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.star,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                          const SizedBox(width: 4,),
+                          Text("${restaurant.rating}",
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                   onTap: () {
                     Navigator.pushNamed(
@@ -71,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             );
           } else {
-            return const Center(child: Text("Memuat data....."),);
+            return const Center(child: Text("Memuat data....."));
           }
         },
       ),
