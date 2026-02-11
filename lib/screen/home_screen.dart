@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:restaurant_app/provider/favorite_provider.dart';
 import 'package:restaurant_app/provider/home_category_provider.dart';
 import 'package:restaurant_app/screen/home_screen_widgets.dart';
+import 'package:restaurant_app/screen/widget/error_state_widget.dart';
 import '../provider/restaurant_list_provider.dart';
 import '../static/result_state.dart';
 
@@ -29,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,10 +47,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (state is ResultStateLoading) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is ResultStateError) {
-                    return Center(
-                      child: Text(
-                        "Error: ${(state as ResultStateError).error}",
-                      ),
+                    return ErrorStateWidget(message: (state as ResultStateError).error,
+                      onRetry: (){
+                        context.read<RestaurantListProvider>().fetchRestaurantList();
+                      },
                     );
                   } else if (state is ResultStateSuccess) {
                     final restaurants =

@@ -394,18 +394,45 @@ void showAddReviewDialog(BuildContext context, String restaurantId) {
             child: const Text("Cancel"),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: ()async  {
               if (nameController.text.isNotEmpty &&
                   reviewController.text.isNotEmpty) {
-                context.read<RestaurantDetailProvider>().postReview(
-                  restaurantId,
-                  nameController.text,
-                  reviewController.text,
+                showDialog(
+                  context: context,
+                  barrierDismissible: false, 
+                  builder: (context) => const Center(child: CircularProgressIndicator(),),
                 );
-                Navigator.pop(context);
 
+                final navigator = Navigator.of(context);
+                final scaffoldMesseger = ScaffoldMessenger.of(context);
+                final success = await context.read<RestaurantDetailProvider>().postReview(restaurantId, nameController.text, reviewController.text);
+
+                navigator.pop();
+
+                if (success){
+                  navigator.pop();
+                  scaffoldMesseger.showSnackBar(
+                    const SnackBar(
+                    content: Text('Review added successfully!'),
+                    backgroundColor: Colors.green,
+                    behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                } else {
+                  scaffoldMesseger.showSnackBar(
+                    const SnackBar(
+                      content: Text('Failed to add review.'),
+                      backgroundColor: Colors.red,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                } 
+              } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Sending review...")),
+                  const SnackBar(
+                    content: Text("Name and Review cannot be empty."),
+                    backgroundColor: Colors.orange,
+                  ),
                 );
               }
             },

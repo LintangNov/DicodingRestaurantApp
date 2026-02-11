@@ -9,12 +9,16 @@ import 'package:restaurant_app/screen/search_screen.dart';
 Widget buildHeader(BuildContext context) {
 
   final textColor = Theme.of(context).colorScheme.onBackground;
+  var orientation = MediaQuery.of(context).orientation;
 
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        (orientation == Orientation.portrait)? Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
         Text(
           "Restaurant",
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -29,6 +33,9 @@ Widget buildHeader(BuildContext context) {
             context,
           ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
         ),
+
+          ],
+        ) : const SizedBox(height: 4,),
         const SizedBox(height: 24),
         GestureDetector(
           onTap: () {

@@ -26,14 +26,18 @@ class RestaurantDetailProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> postReview(String id, String name, String review) async{
+  Future<bool> postReview(String id, String name, String review) async{
     try {
       final isSuccess = await _apiService.postReview(id, name, review);
       if(isSuccess){
         fetchRestaurantDetail(id);
+        return true;
+      } else {
+        return false;
       }
     } catch (e) {
       print("Gagal menyimpan review: $e");
+      return false;
     }
   }
 }

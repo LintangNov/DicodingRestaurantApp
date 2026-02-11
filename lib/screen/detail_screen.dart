@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant_app/screen/widget/error_state_widget.dart';
 import '../provider/restaurant_detail_provider.dart';
 import '../static/result_state.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +35,12 @@ class _DetailScreenState extends State<DetailScreen> {
           } else if (state is ResultStateSuccess){
             return buildDetailContent(context, (state as ResultStateSuccess).data.restaurant);
           } else if (state is ResultStateError){
-            return Center(child: Text((state as ResultStateError).error));
+            return ErrorStateWidget(
+              message: (state as ResultStateError).error,
+              onRetry: (){
+                context.read<RestaurantDetailProvider>().fetchRestaurantDetail(widget.restaurantId);
+              },
+            );
           } else {
             return const Center(child: Text(''),);
           }
