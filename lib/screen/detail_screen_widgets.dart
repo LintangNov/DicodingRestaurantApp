@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/data/model/restaurant_detail.dart';
+import 'package:restaurant_app/data/model/restaurant_list.dart';
 import 'package:restaurant_app/provider/favorite_provider.dart';
 import 'package:restaurant_app/provider/restaurant_detail_provider.dart';
 
@@ -242,7 +243,15 @@ Widget buildHeaderImage(BuildContext context, RestaurantDetail restaurant) {
                     backgroundColor: Colors.transparent,
                     child: IconButton(
                       onPressed: () {
-                        favoriteProvider.toggleFavorite(restaurant.id);
+                        final restaurantSimple = Restaurant(
+                          id: restaurant.id,
+                          name: restaurant.name,
+                          description: restaurant.description,
+                          pictureId: restaurant.pictureId,
+                          city: restaurant.city,
+                          rating: restaurant.rating,
+                        );
+                        favoriteProvider.toggleFavorite(restaurantSimple);
                       },
                       icon: Icon(
                         isFavorite ? Icons.favorite : Icons.favorite_border,

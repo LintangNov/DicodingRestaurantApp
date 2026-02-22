@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/data/local/sqlite_service.dart';
 import 'package:restaurant_app/provider/home_category_provider.dart';
+import 'package:restaurant_app/screen/favorite_screen.dart';
 import 'common/styles.dart';
 import 'provider/restaurant_detail_provider.dart';
 import 'provider/restaurant_list_provider.dart';
@@ -22,6 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider(create: (_) => SqliteService()),
         Provider(create: (_) => ApiService()),
         ChangeNotifierProvider(
           create: (context) =>
@@ -35,8 +38,10 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               RestaurantSearchProvider(context.read<ApiService>()),
         ),
-        ChangeNotifierProvider(create: (context) => FavoriteProvider()),
-        ChangeNotifierProvider(create: (context) => HomeCategoryProvider(),)
+        ChangeNotifierProvider(
+          create: (context) => FavoriteProvider(context.read<SqliteService>()),
+        ),
+        ChangeNotifierProvider(create: (context) => HomeCategoryProvider()),
       ],
       child: MaterialApp(
         title: 'Restaurant App',
@@ -47,6 +52,7 @@ class MyApp extends StatelessWidget {
         routes: {
           HomeScreen.routeName: (context) => const HomeScreen(),
           SearchScreen.routeName: (context) => const SearchScreen(),
+          FavoriteScreen.routeName: (context) => const FavoriteScreen(),
         },
         onGenerateRoute: (settings) {
           if (settings.name == DetailScreen.routeName) {

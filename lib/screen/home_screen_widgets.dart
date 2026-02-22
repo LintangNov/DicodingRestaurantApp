@@ -8,7 +8,7 @@ import 'package:restaurant_app/screen/search_screen.dart';
 
 Widget buildHeader(BuildContext context) {
 
-  final textColor = Theme.of(context).colorScheme.onBackground;
+  final textColor = Theme.of(context).colorScheme.onSurface;
   var orientation = MediaQuery.of(context).orientation;
 
   return Padding(
@@ -91,7 +91,11 @@ Widget buildCategoryChips(BuildContext context, int selectedCategoryIndex) {
 
             return GestureDetector(
               onTap: () {
-                context.read<HomeCategoryProvider>().setIndex(index);
+                if(index == 1){
+                  Navigator.pushNamed(context, '/favorite_screen');
+                } else {
+                  context.read<HomeCategoryProvider>().setIndex(index);
+                }
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(
@@ -240,7 +244,7 @@ Widget buildRestaurantItem(
 
                     IconButton(
                       onPressed: () {
-                        favoriteProvider.toggleFavorite(restaurant.id);
+                        favoriteProvider.toggleFavorite(restaurant);
                       },
                       icon: Icon(
                         isFavorite ? Icons.favorite : Icons.favorite_border,

@@ -49,8 +49,6 @@ ThemeData darkTheme = ThemeData(
     secondary: secondaryColor,
     surface: darkSurfaceColor,
     onSurface: Colors.white, 
-    background: darkColor,
-    onBackground: Colors.white,
     brightness: Brightness.dark,
   ),
   textTheme: myTextTheme.apply(
