@@ -9,7 +9,7 @@ class RestaurantDetailResponse {
     required this.restaurant,
   });
 
-  factory RestaurantDetailResponse.fromJson(Map<String, dynamic> json){
+  factory RestaurantDetailResponse.fromJson(Map<String, dynamic> json) {
     return RestaurantDetailResponse(
       error: json["error"],
       message: json["message"],
@@ -52,11 +52,13 @@ class RestaurantDetail {
       address: json["address"],
       pictureId: json["pictureId"],
       categories: List<Category>.from(
-          json["categories"].map((x) => Category.fromJson(x))),
+        json["categories"].map((x) => Category.fromJson(x)),
+      ),
       menus: Menus.fromJson(json["menus"]),
       rating: json["rating"].toDouble(),
       customerReviews: List<CustomerReview>.from(
-          json["customerReviews"].map((x) => CustomerReview.fromJson(x))),
+        json["customerReviews"].map((x) => CustomerReview.fromJson(x)),
+      ),
     );
   }
 }
@@ -79,8 +81,12 @@ class Menus {
 
   factory Menus.fromJson(Map<String, dynamic> json) {
     return Menus(
-      foods: List<Category>.from(json["foods"].map((x) => Category.fromJson(x))),
-      drinks: List<Category>.from(json["drinks"].map((x) => Category.fromJson(x))),
+      foods: List<Category>.from(
+        json["foods"].map((x) => Category.fromJson(x)),
+      ),
+      drinks: List<Category>.from(
+        json["drinks"].map((x) => Category.fromJson(x)),
+      ),
     );
   }
 }

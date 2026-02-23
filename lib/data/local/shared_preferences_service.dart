@@ -8,10 +8,10 @@ class SharedPreferencesService {
   static const String _keyDarkTheme = "DARK_THEME";
   static const String _keyDailyReminder = "DAILY_REMINDER";
 
-  Future<void> saveThemeSetting(bool isDark)async{
-    try{
-      await _preferences.setBool(_keyDarkTheme,isDark);
-    } catch(e){
+  Future<void> saveThemeSetting(bool isDark) async {
+    try {
+      await _preferences.setBool(_keyDarkTheme, isDark);
+    } catch (e) {
       throw Exception("Failed to save theme preference");
     }
   }
@@ -26,5 +26,5 @@ class SharedPreferencesService {
 
   bool getReminderSetting() => _preferences.getBool(_keyDailyReminder) ?? false;
 
-  bool getThemeSetting()=> _preferences.getBool(_keyDarkTheme)??false;
+  bool getThemeSetting() => _preferences.getBool(_keyDarkTheme) ?? false;
 }

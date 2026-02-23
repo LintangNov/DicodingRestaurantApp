@@ -17,39 +17,43 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   @override
-  void initState(){
+  void initState() {
     super.initState();
     final provider = context.read<RestaurantDetailProvider>();
     final id = widget.restaurantId;
-    Future.microtask((){
+    Future.microtask(() {
       provider.fetchRestaurantDetail(id);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Consumer<RestaurantDetailProvider>(
-        builder: (context, provider, child){
+        builder: (context, provider, child) {
           final state = provider.state;
 
-          if(state is ResultStateLoading){
-            return const Center(child: CircularProgressIndicator(),);
-          } else if (state is ResultStateSuccess){
-            return buildDetailContent(context, (state as ResultStateSuccess).data.restaurant);
-          } else if (state is ResultStateError){
+          if (state is ResultStateLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is ResultStateSuccess) {
+            return buildDetailContent(
+              context,
+              (state as ResultStateSuccess).data.restaurant,
+            );
+          } else if (state is ResultStateError) {
             return ErrorStateWidget(
               message: (state as ResultStateError).error,
-              onRetry: (){
-                context.read<RestaurantDetailProvider>().fetchRestaurantDetail(widget.restaurantId);
+              onRetry: () {
+                context.read<RestaurantDetailProvider>().fetchRestaurantDetail(
+                  widget.restaurantId,
+                );
               },
             );
           } else {
-            return const Center(child: Text(''),);
+            return const Center(child: Text(''));
           }
         },
-      )
+      ),
     );
   }
-
-
 }

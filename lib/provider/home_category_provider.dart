@@ -7,6 +7,6 @@ class HomeCategoryProvider extends ChangeNotifier {
 
   void setIndex(int value) {
     _index = value;
-    notifyListeners(); 
+    notifyListeners();
   }
 }

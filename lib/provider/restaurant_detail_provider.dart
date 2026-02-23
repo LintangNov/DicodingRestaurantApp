@@ -10,7 +10,6 @@ class RestaurantDetailProvider extends ChangeNotifier {
   ResultState<RestaurantDetailResponse> _state = ResultStateInitial();
   ResultState<RestaurantDetailResponse> get state => _state;
 
-
   Future<void> fetchRestaurantDetail(String id) async {
     try {
       _state = ResultStateLoading();
@@ -21,15 +20,15 @@ class RestaurantDetailProvider extends ChangeNotifier {
       _state = ResultStateSuccess(result);
       notifyListeners();
     } catch (e) {
-      _state = ResultStateError(e.toString());
+      _state = ResultStateError(e.toString().replaceAll('Exception: ', ''));
       notifyListeners();
     }
   }
 
-  Future<bool> postReview(String id, String name, String review) async{
+  Future<bool> postReview(String id, String name, String review) async {
     try {
       final isSuccess = await _apiService.postReview(id, name, review);
-      if(isSuccess){
+      if (isSuccess) {
         fetchRestaurantDetail(id);
         return true;
       } else {

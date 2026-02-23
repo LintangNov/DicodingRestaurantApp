@@ -1,14 +1,13 @@
 import 'package:sqflite/sqflite.dart';
 import '../model/restaurant_list.dart';
 
-class SqliteService{
+class SqliteService {
   static const String _databaseName = "restaurant_app.db";
   static const String _tableName = 'favorites';
   static const int _version = 1;
 
   Future<void> createTables(Database database) async {
-    await database.execute(
-      """CREATE TABLE $_tableName(
+    await database.execute("""CREATE TABLE $_tableName(
         id TEXT PRIMARY KEY NOT NULL,
         name TEXT,
         description TEXT,
@@ -16,8 +15,7 @@ class SqliteService{
         city TEXT,
         rating REAL
       )
-      """,
-    );
+      """);
   }
 
   Future<Database> _initializeDb() async {
@@ -50,16 +48,23 @@ class SqliteService{
 
   Future<Restaurant?> getItemById(String id) async {
     final db = await _initializeDb();
-    final results =
-        await db.query(_tableName, where: "id = ?", whereArgs: [id], limit: 1);
+    final results = await db.query(
+      _tableName,
+      where: "id = ?",
+      whereArgs: [id],
+      limit: 1,
+    );
 
     return results.isEmpty ? null : Restaurant.fromJson(results.first);
   }
 
   Future<int> removeItem(String id) async {
     final db = await _initializeDb();
-    final result =
-        await db.delete(_tableName, where: "id = ?", whereArgs: [id]);
+    final result = await db.delete(
+      _tableName,
+      where: "id = ?",
+      whereArgs: [id],
+    );
     return result;
   }
 }

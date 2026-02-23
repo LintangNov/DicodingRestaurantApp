@@ -12,23 +12,21 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
     final provider = context.read<FavoriteProvider>();
-    Future.microtask((){
+    Future.microtask(() {
       provider.loadAllFavorites();
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Favorite Restaurants"),
-      ),
+      appBar: AppBar(title: const Text("Favorite Restaurants")),
       body: Consumer<FavoriteProvider>(
-        builder: (context, provider, child){
+        builder: (context, provider, child) {
           final favorites = provider.favorites;
 
           if (favorites.isEmpty) {
@@ -36,13 +34,17 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.favorite_border, size: 80, color: Colors.grey,),
-                  const SizedBox(height: 16,),
+                  const Icon(
+                    Icons.favorite_border,
+                    size: 80,
+                    color: Colors.grey,
+                  ),
+                  const SizedBox(height: 16),
                   Text(
                     "You don't have any favorites yet",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Theme.of(context).colorScheme.onSurface,
-                    ), 
+                    ),
                   ),
                 ],
               ),
@@ -52,13 +54,13 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           return ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             itemCount: favorites.length,
-            itemBuilder: (context, index){
+            itemBuilder: (context, index) {
               final restaurant = favorites[index];
               return buildRestaurantItem(context, restaurant, provider);
             },
           );
-        }
-        ),
+        },
+      ),
     );
   }
 }

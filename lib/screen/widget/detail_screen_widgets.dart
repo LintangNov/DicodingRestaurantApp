@@ -69,13 +69,7 @@ Widget buildDetailContent(BuildContext context, RestaurantDetail restaurant) {
                 ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              Text(
-                restaurant.description,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-                textAlign: TextAlign.justify,
-              ),
+              DescriptionWidget(description: restaurant.description),
               const SizedBox(height: 24),
               Text(
                 "Foods",
@@ -120,79 +114,76 @@ Widget buildDetailContent(BuildContext context, RestaurantDetail restaurant) {
                   },
                 ),
               ),
-        const SizedBox(height: 24),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Reviews",
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            TextButton.icon(
-              onPressed: () {
-                showAddReviewDialog(context, restaurant.id);
-              },
-              icon: const Icon(Icons.add_comment),
-              label: const Text("Add Review"),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-
-        Column(
-          children: restaurant.customerReviews.map((review) {
-            return Container(
-              margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey.withAlpha(51)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      const CircleAvatar(
-                        radius: 12,
-                        backgroundColor: Colors.grey,
-                        child: Icon(
-                          Icons.person,
-                          size: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        review.name,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const Spacer(),
-                      Text(
-                        review.date,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey,
-                          fontSize: 10,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
                   Text(
-                    review.review,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    "Reviews",
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextButton.icon(
+                    onPressed: () {
+                      showAddReviewDialog(context, restaurant.id);
+                    },
+                    icon: const Icon(Icons.add_comment),
+                    label: const Text("Add Review"),
                   ),
                 ],
               ),
-            );
-          }).toList(),
-        ),
-        const SizedBox(height: 40),
+              const SizedBox(height: 8),
+
+              Column(
+                children: restaurant.customerReviews.map((review) {
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.withAlpha(51)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const CircleAvatar(
+                              radius: 12,
+                              backgroundColor: Colors.grey,
+                              child: Icon(
+                                Icons.person,
+                                size: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              review.name,
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            const Spacer(),
+                            Text(
+                              review.date,
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(color: Colors.grey, fontSize: 10),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          review.review,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 40),
             ],
           ),
         ),
@@ -297,9 +288,7 @@ Widget buildHeaderImage(BuildContext context, RestaurantDetail restaurant) {
               Text(
                 " (${restaurant.customerReviews.length})",
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.onSurface.withAlpha(153),
+                  color: Theme.of(context).colorScheme.onSurface.withAlpha(153),
                 ),
               ),
             ],
@@ -403,28 +392,35 @@ void showAddReviewDialog(BuildContext context, String restaurantId) {
             child: const Text("Cancel"),
           ),
           ElevatedButton(
-            onPressed: ()async  {
+            onPressed: () async {
               if (nameController.text.isNotEmpty &&
                   reviewController.text.isNotEmpty) {
                 showDialog(
                   context: context,
-                  barrierDismissible: false, 
-                  builder: (context) => const Center(child: CircularProgressIndicator(),),
+                  barrierDismissible: false,
+                  builder: (context) =>
+                      const Center(child: CircularProgressIndicator()),
                 );
 
                 final navigator = Navigator.of(context);
                 final scaffoldMesseger = ScaffoldMessenger.of(context);
-                final success = await context.read<RestaurantDetailProvider>().postReview(restaurantId, nameController.text, reviewController.text);
+                final success = await context
+                    .read<RestaurantDetailProvider>()
+                    .postReview(
+                      restaurantId,
+                      nameController.text,
+                      reviewController.text,
+                    );
 
                 navigator.pop();
 
-                if (success){
+                if (success) {
                   navigator.pop();
                   scaffoldMesseger.showSnackBar(
                     const SnackBar(
-                    content: Text('Review added successfully!'),
-                    backgroundColor: Colors.green,
-                    behavior: SnackBarBehavior.floating,
+                      content: Text('Review added successfully!'),
+                      backgroundColor: Colors.green,
+                      behavior: SnackBarBehavior.floating,
                     ),
                   );
                 } else {
@@ -435,7 +431,7 @@ void showAddReviewDialog(BuildContext context, String restaurantId) {
                       behavior: SnackBarBehavior.floating,
                     ),
                   );
-                } 
+                }
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -451,4 +447,50 @@ void showAddReviewDialog(BuildContext context, String restaurantId) {
       );
     },
   );
+}
+
+class DescriptionWidget extends StatefulWidget {
+  final String description;
+
+  const DescriptionWidget({super.key, required this.description});
+
+  @override
+  State<DescriptionWidget> createState() => _DescriptionWidgetState();
+}
+
+class _DescriptionWidgetState extends State<DescriptionWidget> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.description,
+          maxLines: _isExpanded ? null : 3,
+          overflow: _isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+          textAlign: TextAlign.justify,
+        ),
+        const SizedBox(height: 4),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _isExpanded = !_isExpanded;
+            });
+          },
+          child: Text(
+            _isExpanded ? "Show Less" : "Read More",
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }

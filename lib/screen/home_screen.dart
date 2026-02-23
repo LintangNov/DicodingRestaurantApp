@@ -7,7 +7,6 @@ import 'package:restaurant_app/screen/widget/error_state_widget.dart';
 import '../provider/restaurant_list_provider.dart';
 import '../static/result_state.dart';
 
-
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home_screen';
   const HomeScreen({super.key});
@@ -39,49 +38,77 @@ class _HomeScreenState extends State<HomeScreen> {
             buildCategoryChips(context),
             const SizedBox(height: 16),
             Expanded(
-              child: Consumer3<HomeCategoryProvider,FavoriteProvider, RestaurantListProvider>(
-                builder: (context, categoryProvider, favoriteProvider, listProvider, child) {
-                  final state = listProvider.state;
+              child:
+                  Consumer3<
+                    HomeCategoryProvider,
+                    FavoriteProvider,
+                    RestaurantListProvider
+                  >(
+                    builder:
+                        (
+                          context,
+                          categoryProvider,
+                          favoriteProvider,
+                          listProvider,
+                          child,
+                        ) {
+                          final state = listProvider.state;
 
-                  if (state is ResultStateLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is ResultStateError) {
-                    return ErrorStateWidget(message: (state as ResultStateError).error,
-                      onRetry: (){
-                        context.read<RestaurantListProvider>().fetchRestaurantList();
-                      },
-                    );
-                  } else if (state is ResultStateSuccess) {
-                    final restaurants =
-                        (state as ResultStateSuccess).data.restaurants;
+                          if (state is ResultStateLoading) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (state is ResultStateError) {
+                            return ErrorStateWidget(
+                              message: (state as ResultStateError).error,
+                              onRetry: () {
+                                context
+                                    .read<RestaurantListProvider>()
+                                    .fetchRestaurantList();
+                              },
+                            );
+                          } else if (state is ResultStateSuccess) {
+                            final restaurants =
+                                (state as ResultStateSuccess).data.restaurants;
 
-                    final displayedRestaurants = categoryProvider.index == 1
-                        ? restaurants
-                            .where((r) => favoriteProvider.isFavorite(r.id))
-                            .toList()
-                        : restaurants;
+                            final displayedRestaurants =
+                                categoryProvider.index == 1
+                                ? restaurants
+                                      .where(
+                                        (r) =>
+                                            favoriteProvider.isFavorite(r.id),
+                                      )
+                                      .toList()
+                                : restaurants;
 
-                    if (displayedRestaurants.isEmpty && categoryProvider.index == 1) {
-                      return const Center(
-                        child: Text("No favorite restaurants found."),
-                      );
-                    }
+                            if (displayedRestaurants.isEmpty &&
+                                categoryProvider.index == 1) {
+                              return const Center(
+                                child: Text("No favorite restaurants found."),
+                              );
+                            }
 
-                    return ListView.builder(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 8,
-                      ),
-                      itemCount: displayedRestaurants.length,
-                      itemBuilder: (context, index) {
-                        return buildRestaurantItem(context, displayedRestaurants[index], favoriteProvider);
-                      },
-                    );
-                  } else {
-                    return const Center(child: Text("Loading data...."));
-                  }
-                },
-              ),
+                            return ListView.builder(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 8,
+                              ),
+                              itemCount: displayedRestaurants.length,
+                              itemBuilder: (context, index) {
+                                return buildRestaurantItem(
+                                  context,
+                                  displayedRestaurants[index],
+                                  favoriteProvider,
+                                );
+                              },
+                            );
+                          } else {
+                            return const Center(
+                              child: Text("Loading data...."),
+                            );
+                          }
+                        },
+                  ),
             ),
           ],
         ),

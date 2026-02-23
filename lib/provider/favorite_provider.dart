@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import '../data/local/sqlite_service.dart';
 import '../data/model/restaurant_list.dart';
 
-class FavoriteProvider extends ChangeNotifier{
+class FavoriteProvider extends ChangeNotifier {
   final SqliteService _sqliteService;
-  
+
   FavoriteProvider(this._sqliteService);
 
   String _message = "";
@@ -16,11 +16,11 @@ class FavoriteProvider extends ChangeNotifier{
   Set<String> _favoriteIds = {};
 
   Future<void> loadAllFavorites() async {
-    try{
+    try {
       _favorites = await _sqliteService.getAllItems();
       _favoriteIds = _favorites.map((e) => e.id).toSet();
       notifyListeners();
-    } catch (e){
+    } catch (e) {
       _message = "Failed to load favorites data";
       notifyListeners();
     }
@@ -28,11 +28,11 @@ class FavoriteProvider extends ChangeNotifier{
 
   bool isFavorite(String id) => _favoriteIds.contains(id);
 
-  Future<void> toggleFavorite(Restaurant restaurant) async{
-    try{
+  Future<void> toggleFavorite(Restaurant restaurant) async {
+    try {
       final isExist = _favoriteIds.contains(restaurant.id);
 
-      if(isExist){
+      if (isExist) {
         await _sqliteService.removeItem(restaurant.id);
         _message = 'Deleted from favorites';
       } else {
@@ -41,8 +41,10 @@ class FavoriteProvider extends ChangeNotifier{
       }
 
       await loadAllFavorites();
-    } catch (e){
-      _message = isFavorite(restaurant.id)? 'Gagal menghapus dari favorit':'Gagal menambahkan ke favorit';
+    } catch (e) {
+      _message = isFavorite(restaurant.id)
+          ? 'Gagal menghapus dari favorit'
+          : 'Gagal menambahkan ke favorit';
       notifyListeners();
     }
   }

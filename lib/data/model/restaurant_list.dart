@@ -1,4 +1,4 @@
-class RestaurantListResponse{
+class RestaurantListResponse {
   final bool error;
   final String? message;
   final int? count;
@@ -13,7 +13,7 @@ class RestaurantListResponse{
     required this.restaurants,
   });
 
-  factory RestaurantListResponse.fromJson(Map<String,dynamic> json){
+  factory RestaurantListResponse.fromJson(Map<String, dynamic> json) {
     return RestaurantListResponse(
       error: json['error'],
       message: json["message"],

@@ -13,7 +13,6 @@ class RestaurantSearchProvider extends ChangeNotifier {
   String _query = "";
   String get query => _query;
 
-
   Future<void> fetchSearchRestaurant(String query) async {
     try {
       _query = query;
@@ -28,14 +27,14 @@ class RestaurantSearchProvider extends ChangeNotifier {
 
       final result = await _apiService.searchRestaurants(query);
 
-      if (result.restaurants.isEmpty){
+      if (result.restaurants.isEmpty) {
         _state = ResultStateError("Restoran tidak ditemukan");
       } else {
         _state = ResultStateSuccess(result);
       }
       notifyListeners();
     } catch (e) {
-      _state = ResultStateError("Gagal memuat pencarian restoran: $e");
+      _state = ResultStateError(e.toString().replaceAll('Exception: ', ''));
       notifyListeners();
     }
   }

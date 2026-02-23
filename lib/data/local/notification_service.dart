@@ -8,29 +8,39 @@ class NotificationService {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    const InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-    );
+    const InitializationSettings initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
 
     await flutterLocalNotificationsPlugin.initialize(
       settings: initializationSettings,
     );
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >()
+        ?.requestNotificationsPermission();
   }
 
   Future<void> showNotification(
-      int id, String title, String body, String payload) async {
+    int id,
+    String title,
+    String body,
+    String payload,
+  ) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-      'restaurant_channel',
-      'Restaurant Recommendation',
-      channelDescription: 'Daily restaurant recommendation for lunch',
-      importance: Importance.max,
-      priority: Priority.high,
-      ticker: 'ticker',
-    );
+          'restaurant_channel',
+          'Restaurant Recommendation',
+          channelDescription: 'Daily restaurant recommendation for lunch',
+          importance: Importance.max,
+          priority: Priority.high,
+          ticker: 'ticker',
+        );
 
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+    );
 
     await flutterLocalNotificationsPlugin.show(
       id: id,

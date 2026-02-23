@@ -9,11 +9,9 @@ class SettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Settings"),
-      ),
+      appBar: AppBar(title: const Text("Settings")),
       body: Consumer<SettingProvider>(
-        builder: (context, provider, child){
+        builder: (context, provider, child) {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
@@ -24,13 +22,16 @@ class SettingScreen extends StatelessWidget {
                 ),
                 subtitle: Text(
                   "Enable dark mode",
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
                 activeThumbColor: Theme.of(context).colorScheme.secondary,
-                value: provider.isDarkTheme, 
-                onChanged: (value){
-                provider.enabledarkTheme(value);
-              },),
+                value: provider.isDarkTheme,
+                onChanged: (value) {
+                  provider.enabledarkTheme(value);
+                },
+              ),
               const Divider(),
               SwitchListTile(
                 title: Text(
@@ -39,7 +40,9 @@ class SettingScreen extends StatelessWidget {
                 ),
                 subtitle: Text(
                   "Enable daily notification at 11:00 AM",
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: Colors.grey),
                 ),
                 value: provider.isReminderActive,
                 activeThumbColor: Theme.of(context).colorScheme.secondary,
@@ -49,8 +52,8 @@ class SettingScreen extends StatelessWidget {
               ),
             ],
           );
-        }
-        ),
+        },
+      ),
     );
   }
 }

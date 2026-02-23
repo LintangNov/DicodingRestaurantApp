@@ -1,4 +1,4 @@
-sealed class ResultState<T>{}
+sealed class ResultState<T> {}
 
 class ResultStateInitial<T> extends ResultState<T> {}
 

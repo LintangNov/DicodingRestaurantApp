@@ -7,23 +7,23 @@ import '../model/restaurant_detail.dart';
 class ApiService {
   static const String _baseUrl = "https://restaurant-api.dicoding.dev";
 
-
-  Future<T> _handleRequest<T>(Future<T> Function() request) async{
-    try{
+  Future<T> _handleRequest<T>(Future<T> Function() request) async {
+    try {
       return await request();
-    } on SocketException{
-      throw Exception('Internet connection error');
-    } on FormatException{
+    } on SocketException {
+      throw Exception('No internet connection. Please check your network.');
+    } on FormatException {
       throw Exception('Data format error');
-    } catch(e){
-      throw Exception('Unexpected error: $e');
+    } catch (e) {
+      throw Exception('Failed to connect to the server. Please try again later.');
     }
   }
+
   Future<RestaurantListResponse> getRestaurantList() async {
     return _handleRequest(() async {
       final response = await http.get(Uri.parse("$_baseUrl/list"));
 
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         return RestaurantListResponse.fromJson(json.decode(response.body));
       } else {
         throw Exception('Failed to load restaurant list');
@@ -31,21 +31,23 @@ class ApiService {
     });
   }
 
-  Future<RestaurantDetailResponse> getRestaurantDetail(String id) async{
-    return _handleRequest(() async{
+  Future<RestaurantDetailResponse> getRestaurantDetail(String id) async {
+    return _handleRequest(() async {
       final response = await http.get(Uri.parse('$_baseUrl/detail/$id'));
 
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         return RestaurantDetailResponse.fromJson(json.decode(response.body));
-      } else if(response.statusCode == 404){
+      } else if (response.statusCode == 404) {
         throw Exception('Restaurant not found');
       } else {
-        throw Exception('Failed to load restaurant detail (status code: ${response.statusCode})');
+        throw Exception(
+          'Failed to load restaurant detail (status code: ${response.statusCode})',
+        );
       }
     });
   }
 
-  Future<RestaurantListResponse> searchRestaurants(String query) async{
+  Future<RestaurantListResponse> searchRestaurants(String query) async {
     return _handleRequest(() async {
       final response = await http.get(Uri.parse("$_baseUrl/search?q=$query"));
 
@@ -57,22 +59,20 @@ class ApiService {
     });
   }
 
-  Future<bool> postReview(String id, String name, String review) async{
+  Future<bool> postReview(String id, String name, String review) async {
     try {
       final response = await http.post(
         Uri.parse("$_baseUrl/review"),
         headers: {"Content-Type": "application/json"},
-        body: json.encode({
-          "id": id,
-          "name": name,
-          "review": review,
-        }),
+        body: json.encode({"id": id, "name": name, "review": review}),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return true;
       } else {
-        throw Exception('Failed to post review (status code: ${response.statusCode})');
+        throw Exception(
+          'Failed to post review (status code: ${response.statusCode})',
+        );
       }
     } on SocketException {
       throw Exception('Failed: No internet connection.');

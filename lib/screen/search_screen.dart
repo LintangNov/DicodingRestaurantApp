@@ -53,7 +53,9 @@ class _SearchScreenState extends State<SearchScreen> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                          ),
                           suffixIcon: searchProvider.query.isNotEmpty
                               ? IconButton(
                                   icon: const Icon(Icons.clear),
@@ -82,12 +84,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
               if (state is ResultStateLoading) {
                 return const SliverFillRemaining(
-                  hasScrollBody: false, 
+                  hasScrollBody: false,
                   child: Center(child: CircularProgressIndicator()),
                 );
-                
               } else if (state is ResultStateSuccess) {
-                final restaurants = (state as ResultStateSuccess).data.restaurants;
+                final restaurants =
+                    (state as ResultStateSuccess).data.restaurants;
 
                 if (restaurants.isEmpty) {
                   return SliverFillRemaining(
@@ -100,30 +102,30 @@ class _SearchScreenState extends State<SearchScreen> {
                   );
                 }
 
-                
                 return SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return buildRestaurantItem(
-                          context,
-                          restaurants[index],
-                          favoriteProvider,
-                        );
-                      },
-                      childCount: restaurants.length,
-                    ),
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      return buildRestaurantItem(
+                        context,
+                        restaurants[index],
+                        favoriteProvider,
+                      );
+                    }, childCount: restaurants.length),
                   ),
                 );
-                
               } else if (state is ResultStateError) {
                 return SliverFillRemaining(
                   hasScrollBody: false,
                   child: ErrorStateWidget(
                     message: (state as ResultStateError).error,
                     onRetry: () {
-                      final query = context.read<RestaurantSearchProvider>().query;
+                      final query = context
+                          .read<RestaurantSearchProvider>()
+                          .query;
                       if (query.isNotEmpty) {
                         context
                             .read<RestaurantSearchProvider>()
@@ -132,10 +134,9 @@ class _SearchScreenState extends State<SearchScreen> {
                     },
                   ),
                 );
-                
               } else {
                 return SliverFillRemaining(
-                  hasScrollBody: false, 
+                  hasScrollBody: false,
                   child: _buildMessage(
                     context,
                     Icons.restaurant,
@@ -149,6 +150,7 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
     );
   }
+
   Widget _buildMessage(BuildContext context, IconData icon, String message) {
     return Center(
       child: Column(

@@ -11,7 +11,10 @@ final TextTheme myTextTheme = TextTheme(
   displayMedium: GoogleFonts.poppins(fontSize: 45, fontWeight: FontWeight.bold),
   displaySmall: GoogleFonts.poppins(fontSize: 36, fontWeight: FontWeight.bold),
   headlineLarge: GoogleFonts.poppins(fontSize: 32, fontWeight: FontWeight.w600),
-  headlineMedium: GoogleFonts.poppins(fontSize: 28, fontWeight: FontWeight.w600),
+  headlineMedium: GoogleFonts.poppins(
+    fontSize: 28,
+    fontWeight: FontWeight.w600,
+  ),
   headlineSmall: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w600),
   titleLarge: GoogleFonts.poppins(fontSize: 22, fontWeight: FontWeight.w500),
   titleMedium: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w500),
@@ -27,14 +30,14 @@ ThemeData lightTheme = ThemeData(
     seedColor: primaryColor,
     primary: primaryColor,
     secondary: secondaryColor,
-    surface: Colors.white, 
-    onSurface: Colors.black, 
+    surface: Colors.white,
+    onSurface: Colors.black,
     brightness: Brightness.light,
   ),
   textTheme: myTextTheme,
   useMaterial3: true,
   scaffoldBackgroundColor: Colors.grey.shade50,
-  cardColor: Colors.white, 
+  cardColor: Colors.white,
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.white,
     foregroundColor: Colors.black,
@@ -45,23 +48,22 @@ ThemeData lightTheme = ThemeData(
 ThemeData darkTheme = ThemeData(
   colorScheme: ColorScheme.fromSeed(
     seedColor: primaryColor,
-    primary: primaryColor, 
+    primary: primaryColor,
     secondary: secondaryColor,
     surface: darkSurfaceColor,
-    onSurface: Colors.white, 
+    onSurface: Colors.white,
     brightness: Brightness.dark,
   ),
   textTheme: myTextTheme.apply(
-    bodyColor: Colors.white, 
+    bodyColor: Colors.white,
     displayColor: Colors.white,
   ),
   useMaterial3: true,
   scaffoldBackgroundColor: darkColor,
-  cardColor: darkSurfaceColor, 
+  cardColor: darkSurfaceColor,
   appBarTheme: const AppBarTheme(
     backgroundColor: darkColor,
     foregroundColor: Colors.white,
     elevation: 0,
   ),
 );
-

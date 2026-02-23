@@ -8,7 +8,6 @@ import 'package:restaurant_app/screen/search_screen.dart';
 import 'package:restaurant_app/screen/setting_screen.dart';
 
 Widget buildHeader(BuildContext context) {
-
   final textColor = Theme.of(context).colorScheme.onSurface;
   var orientation = MediaQuery.of(context).orientation;
 
@@ -19,14 +18,15 @@ Widget buildHeader(BuildContext context) {
       children: [
         (orientation == Orientation.portrait)
             ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         "Restaurant",
-                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        style: Theme.of(context).textTheme.headlineMedium
+                            ?.copyWith(
                               color: textColor,
                               fontWeight: FontWeight.bold,
                             ),
@@ -35,8 +35,8 @@ Widget buildHeader(BuildContext context) {
                       Text(
                         "Recommended restaurant for you!",
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                       ),
                     ],
                   ),
@@ -89,7 +89,7 @@ Widget buildHeader(BuildContext context) {
 }
 
 Widget buildCategoryChips(BuildContext context) {
-  final categories = ["All", "Favorite"]; 
+  final categories = ["All", "Favorite"];
 
   return Consumer<HomeCategoryProvider>(
     builder: (context, categoryProvider, child) {
@@ -105,7 +105,7 @@ Widget buildCategoryChips(BuildContext context) {
 
             return GestureDetector(
               onTap: () {
-                if(index == 1){
+                if (index == 1) {
                   Navigator.pushNamed(context, '/favorite_screen');
                 } else {
                   context.read<HomeCategoryProvider>().setIndex(index);
@@ -229,9 +229,9 @@ Widget buildRestaurantItem(
                     Expanded(
                       child: Text(
                         restaurant.city,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

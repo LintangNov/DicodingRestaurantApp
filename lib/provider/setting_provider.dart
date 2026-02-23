@@ -6,7 +6,7 @@ class SettingProvider extends ChangeNotifier {
   final SharedPreferencesService _service;
   final WorkmanagerService _workmanagerService = WorkmanagerService();
 
-  SettingProvider(this._service){
+  SettingProvider(this._service) {
     _getThemeSetting();
     _getReminderSetting();
   }
@@ -17,17 +17,17 @@ class SettingProvider extends ChangeNotifier {
   bool _isReminderActive = false;
   bool get isReminderActive => _isReminderActive;
 
-  void _getThemeSetting(){
+  void _getThemeSetting() {
     _isDarkTheme = _service.getThemeSetting();
     notifyListeners();
   }
 
-  void _getReminderSetting(){
+  void _getReminderSetting() {
     _isReminderActive = _service.getReminderSetting();
     notifyListeners();
   }
 
-  void enabledarkTheme(bool value)async{
+  void enabledarkTheme(bool value) async {
     await _service.saveThemeSetting(value);
     _isDarkTheme = value;
     notifyListeners();
@@ -37,12 +37,11 @@ class SettingProvider extends ChangeNotifier {
     await _service.saveReminderSetting(value);
     _isReminderActive = value;
 
-    if(_isReminderActive){
+    if (_isReminderActive) {
       await _workmanagerService.scheduleDailyReminder();
     } else {
       await _workmanagerService.cancelDailyReminder();
     }
     notifyListeners();
-    
   }
 }

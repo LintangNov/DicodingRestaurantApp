@@ -16,7 +16,7 @@ void callbackDispatcher() {
         final randomRestaurant = restaurants[randomIndex];
 
         final notificationService = NotificationService();
-        await notificationService.init(); 
+        await notificationService.init();
         await notificationService.showNotification(
           1,
           'Time to lunch! 🍽️',
@@ -35,30 +35,29 @@ class WorkmanagerService {
   final Workmanager _workmanager;
 
   WorkmanagerService([Workmanager? workmanager])
-      : _workmanager = workmanager ?? Workmanager();
+    : _workmanager = workmanager ?? Workmanager();
 
   Future<void> init() async {
-    await _workmanager.initialize(callbackDispatcher,);
+    await _workmanager.initialize(callbackDispatcher);
   }
 
   Future<void> scheduleDailyReminder() async {
     final now = DateTime.now();
     var scheduledTime = DateTime(now.year, now.month, now.day, 11, 0);
-    
+
     if (now.isAfter(scheduledTime)) {
       scheduledTime = scheduledTime.add(const Duration(days: 1));
     }
     final initialDelay = scheduledTime.difference(now);
 
     await _workmanager.registerPeriodicTask(
-      'daily_reminder_task', 
-      'daily_reminder_task', 
+      'daily_reminder_task',
+      'daily_reminder_task',
       frequency: const Duration(hours: 24),
       initialDelay: initialDelay,
-      constraints: Constraints(
-        networkType: NetworkType.connected,
-      ),
+      constraints: Constraints(networkType: NetworkType.connected),
     );
+
   }
 
   Future<void> cancelDailyReminder() async {
