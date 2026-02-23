@@ -36,7 +36,7 @@ class RestaurantDetailProvider extends ChangeNotifier {
         return false;
       }
     } catch (e) {
-      print("Gagal menyimpan review: $e");
+      debugPrint("Gagal menyimpan review: $e");
       return false;
     }
   }

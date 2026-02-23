@@ -149,7 +149,7 @@ Widget buildDetailContent(BuildContext context, RestaurantDetail restaurant) {
               decoration: BoxDecoration(
                 color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                border: Border.all(color: Colors.grey.withAlpha(51)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,7 +230,7 @@ Widget buildHeaderImage(BuildContext context, RestaurantDetail restaurant) {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CircleAvatar(
-                backgroundColor: Colors.black.withOpacity(0.5),
+                backgroundColor: Colors.black.withAlpha(128),
                 child: IconButton(
                   icon: const Icon(Icons.arrow_back, color: Colors.white),
                   onPressed: () => Navigator.pop(context),
@@ -277,7 +277,7 @@ Widget buildHeaderImage(BuildContext context, RestaurantDetail restaurant) {
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withAlpha(26),
                 blurRadius: 10,
                 offset: const Offset(0, 5),
               ),
@@ -299,7 +299,7 @@ Widget buildHeaderImage(BuildContext context, RestaurantDetail restaurant) {
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(
                     context,
-                  ).colorScheme.onSurface.withOpacity(0.6),
+                  ).colorScheme.onSurface.withAlpha(153),
                 ),
               ),
             ],
@@ -341,7 +341,7 @@ Widget buildMenuItem(BuildContext context, String name, IconData icon) {
     decoration: BoxDecoration(
       color: Theme.of(context).cardColor,
       borderRadius: BorderRadius.circular(16),
-      border: Border.all(color: Colors.grey.withOpacity(0.2)),
+      border: Border.all(color: Colors.grey.withAlpha(51)),
     ),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,

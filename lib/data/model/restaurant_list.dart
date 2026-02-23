@@ -1,4 +1,3 @@
-
 class RestaurantListResponse{
   final bool error;
   final String? message;

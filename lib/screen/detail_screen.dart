@@ -19,8 +19,10 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   void initState(){
     super.initState();
+    final provider = context.read<RestaurantDetailProvider>();
+    final id = widget.restaurantId;
     Future.microtask((){
-      context.read<RestaurantDetailProvider>().fetchRestaurantDetail(widget.restaurantId);
+      provider.fetchRestaurantDetail(id);
     });
   }
   @override

@@ -17,13 +17,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final int _selectedCategoryIndex = 0;
   @override
   void initState() {
     super.initState();
-
+    final provider = context.read<RestaurantListProvider>();
     Future.microtask(() {
-      context.read<RestaurantListProvider>().fetchRestaurantList();
+      provider.fetchRestaurantList();
     });
   }
 
@@ -37,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             buildHeader(context),
             const SizedBox(height: 16),
-            buildCategoryChips(context, _selectedCategoryIndex),
+            buildCategoryChips(context),
             const SizedBox(height: 16),
             Expanded(
               child: Consumer3<HomeCategoryProvider,FavoriteProvider, RestaurantListProvider>(

@@ -5,6 +5,7 @@ import 'package:restaurant_app/provider/favorite_provider.dart';
 import 'package:restaurant_app/provider/home_category_provider.dart';
 import 'package:restaurant_app/screen/detail_screen.dart';
 import 'package:restaurant_app/screen/search_screen.dart';
+import 'package:restaurant_app/screen/setting_screen.dart';
 
 Widget buildHeader(BuildContext context) {
 
@@ -16,26 +17,39 @@ Widget buildHeader(BuildContext context) {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        (orientation == Orientation.portrait)? Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-        Text(
-          "Restaurant",
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            color: textColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          "Recommended restaurant for you!",
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
-        ),
-
-          ],
-        ) : const SizedBox(height: 4,),
+        (orientation == Orientation.portrait)
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Restaurant",
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                              color: textColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "Recommended restaurant for you!",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, SettingScreen.routeName);
+                    },
+                    icon: Icon(Icons.settings, color: textColor),
+                    tooltip: "Settings",
+                  ),
+                ],
+              )
+            : const SizedBox(height: 4),
         const SizedBox(height: 24),
         GestureDetector(
           onTap: () {
@@ -48,7 +62,7 @@ Widget buildHeader(BuildContext context) {
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withAlpha(13),
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                 ),
@@ -74,7 +88,7 @@ Widget buildHeader(BuildContext context) {
   );
 }
 
-Widget buildCategoryChips(BuildContext context, int selectedCategoryIndex) {
+Widget buildCategoryChips(BuildContext context) {
   final categories = ["All", "Favorite"]; 
 
   return Consumer<HomeCategoryProvider>(
@@ -109,13 +123,13 @@ Widget buildCategoryChips(BuildContext context, int selectedCategoryIndex) {
                   borderRadius: BorderRadius.circular(24),
                   border: isSelected
                       ? null
-                      : Border.all(color: Colors.grey.withOpacity(0.2)),
+                      : Border.all(color: Colors.grey.withAlpha(51)),
                   boxShadow: isSelected
                       ? [
                           BoxShadow(
                             color: Theme.of(
                               context,
-                            ).colorScheme.primary.withOpacity(0.4),
+                            ).colorScheme.primary.withAlpha(102),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -163,7 +177,7 @@ Widget buildRestaurantItem(
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha(13),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),

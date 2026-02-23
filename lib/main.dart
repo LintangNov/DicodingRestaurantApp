@@ -19,7 +19,7 @@ import 'screen/home_screen.dart';
 import 'screen/search_screen.dart';
 import 'screen/detail_screen.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
 
@@ -40,7 +40,6 @@ class MyApp extends StatelessWidget {
         Provider(create: (_) => SqliteService()),
         Provider(create: (_) => ApiService()),
         Provider(create: (_) => SharedPreferencesService(preferences)),
-        Provider(create: (_) => SqliteService()),
         ChangeNotifierProvider(
           create: (context) =>
               RestaurantListProvider(context.read<ApiService>()),

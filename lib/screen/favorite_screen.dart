@@ -16,8 +16,9 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   @override
   void initState(){
     super.initState();
+    final provider = context.read<FavoriteProvider>();
     Future.microtask((){
-      context.read<FavoriteProvider>().loadAllFavorites();
+      provider.loadAllFavorites();
     });
   }
   @override
