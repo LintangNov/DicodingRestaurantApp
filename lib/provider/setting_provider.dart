@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/data/local/shared_preferences_service.dart';
+import 'package:restaurant_app/data/local/workmanager_service.dart';
 
 class SettingProvider extends ChangeNotifier {
   final SharedPreferencesService _service;
+  final WorkmanagerService _workmanagerService = WorkmanagerService();
 
   SettingProvider(this._service){
     _getThemeSetting();
@@ -34,6 +36,12 @@ class SettingProvider extends ChangeNotifier {
   void enableDailyReminder(bool value) async {
     await _service.saveReminderSetting(value);
     _isReminderActive = value;
+
+    if(_isReminderActive){
+      await _workmanagerService.scheduleDailyReminder();
+    } else {
+      await _workmanagerService.cancelDailyReminder();
+    }
     notifyListeners();
     
   }

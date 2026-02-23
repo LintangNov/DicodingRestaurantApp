@@ -21,7 +21,7 @@ class FavoriteProvider extends ChangeNotifier{
       _favoriteIds = _favorites.map((e) => e.id).toSet();
       notifyListeners();
     } catch (e){
-      _message = "Gagal memuat data favorit";
+      _message = "Failed to load favorites data";
       notifyListeners();
     }
   }
@@ -34,10 +34,10 @@ class FavoriteProvider extends ChangeNotifier{
 
       if(isExist){
         await _sqliteService.removeItem(restaurant.id);
-        _message = 'Dihapus dari favorit';
+        _message = 'Deleted from favorites';
       } else {
         await _sqliteService.insertItem(restaurant);
-        _message = 'Ditambahkan ke favorit';
+        _message = 'Added to favorites';
       }
 
       await loadAllFavorites();

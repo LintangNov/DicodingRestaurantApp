@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/data/local/notification_service.dart';
 import 'package:restaurant_app/data/local/shared_preferences_service.dart';
 import 'package:restaurant_app/data/local/sqlite_service.dart';
+import 'package:restaurant_app/data/local/workmanager_service.dart';
 import 'package:restaurant_app/provider/home_category_provider.dart';
 import 'package:restaurant_app/provider/setting_provider.dart';
 import 'package:restaurant_app/screen/favorite_screen.dart';
@@ -17,9 +19,12 @@ import 'screen/home_screen.dart';
 import 'screen/search_screen.dart';
 import 'screen/detail_screen.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
+
+  await WorkmanagerService().init();
+  await NotificationService().init();
   runApp(MyApp(preferences: prefs));
 }
 
@@ -35,6 +40,7 @@ class MyApp extends StatelessWidget {
         Provider(create: (_) => SqliteService()),
         Provider(create: (_) => ApiService()),
         Provider(create: (_) => SharedPreferencesService(preferences)),
+        Provider(create: (_) => SqliteService()),
         ChangeNotifierProvider(
           create: (context) =>
               RestaurantListProvider(context.read<ApiService>()),
@@ -51,36 +57,38 @@ class MyApp extends StatelessWidget {
           create: (context) => FavoriteProvider(context.read<SqliteService>()),
         ),
         ChangeNotifierProvider(create: (context) => HomeCategoryProvider()),
-        ChangeNotifierProvider(create: (context) => SettingProvider(context.read<SharedPreferencesService>()),)
+        ChangeNotifierProvider(
+          create: (context) =>
+              SettingProvider(context.read<SharedPreferencesService>()),
+        ),
       ],
       child: Consumer<SettingProvider>(
-        builder: (context, provider, child){
+        builder: (context, provider, child) {
           return MaterialApp(
-          title: 'Restaurant App',
-          theme: lightTheme,
-          darkTheme: darkTheme,
-          themeMode: provider.isDarkTheme ? ThemeMode.dark : ThemeMode.light,
-          initialRoute: HomeScreen.routeName,
-          routes: {
-            HomeScreen.routeName: (context) => const HomeScreen(),
-            SearchScreen.routeName: (context) => const SearchScreen(),
-            FavoriteScreen.routeName: (context) => const FavoriteScreen(),
-            SettingScreen.routeName: (context) => const SettingScreen(),
-          },
-          onGenerateRoute: (settings) {
-            if (settings.name == DetailScreen.routeName) {
-              final args = settings.arguments as String;
-              return MaterialPageRoute(
-                builder: (context) {
-                  return DetailScreen(restaurantId: args);
-                },
-              );
-            }
-            return null;
-          },
-        );
+            title: 'Restaurant App',
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: provider.isDarkTheme ? ThemeMode.dark : ThemeMode.light,
+            initialRoute: HomeScreen.routeName,
+            routes: {
+              HomeScreen.routeName: (context) => const HomeScreen(),
+              SearchScreen.routeName: (context) => const SearchScreen(),
+              FavoriteScreen.routeName: (context) => const FavoriteScreen(),
+              SettingScreen.routeName: (context) => const SettingScreen(),
+            },
+            onGenerateRoute: (settings) {
+              if (settings.name == DetailScreen.routeName) {
+                final args = settings.arguments as String;
+                return MaterialPageRoute(
+                  builder: (context) {
+                    return DetailScreen(restaurantId: args);
+                  },
+                );
+              }
+              return null;
+            },
+          );
         },
-        
       ),
     );
   }
