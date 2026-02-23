@@ -3,7 +3,7 @@ import 'package:restaurant_app/screen/widget/error_state_widget.dart';
 import '../provider/restaurant_detail_provider.dart';
 import '../static/result_state.dart';
 import 'package:provider/provider.dart';
-import 'detail_screen_widgets.dart';
+import 'widget/detail_screen_widgets.dart';
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen({super.key, required this.restaurantId});

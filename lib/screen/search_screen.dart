@@ -4,7 +4,7 @@ import 'package:restaurant_app/screen/widget/error_state_widget.dart';
 import '../provider/restaurant_search_provider.dart';
 import '../provider/favorite_provider.dart';
 import '../static/result_state.dart';
-import 'home_screen_widgets.dart';
+import 'widget/home_screen_widgets.dart';
 
 class SearchScreen extends StatefulWidget {
   static const routeName = '/search_screen';

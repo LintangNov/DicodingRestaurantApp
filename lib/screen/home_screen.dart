@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/provider/favorite_provider.dart';
 import 'package:restaurant_app/provider/home_category_provider.dart';
-import 'package:restaurant_app/screen/home_screen_widgets.dart';
+import 'package:restaurant_app/screen/widget/home_screen_widgets.dart';
 import 'package:restaurant_app/screen/widget/error_state_widget.dart';
 import '../provider/restaurant_list_provider.dart';
 import '../static/result_state.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../provider/favorite_provider.dart';
-import 'home_screen_widgets.dart';
+import 'widget/home_screen_widgets.dart';
 
 class FavoriteScreen extends StatefulWidget {
   static const routeName = '/favorite_screen';

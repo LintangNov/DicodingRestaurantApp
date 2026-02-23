@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/data/local/shared_preferences_service.dart';
 import 'package:restaurant_app/data/local/sqlite_service.dart';
 import 'package:restaurant_app/provider/home_category_provider.dart';
+import 'package:restaurant_app/provider/setting_provider.dart';
 import 'package:restaurant_app/screen/favorite_screen.dart';
+import 'package:restaurant_app/screen/setting_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'common/styles.dart';
 import 'provider/restaurant_detail_provider.dart';
 import 'provider/restaurant_list_provider.dart';
@@ -13,12 +17,16 @@ import 'screen/home_screen.dart';
 import 'screen/search_screen.dart';
 import 'screen/detail_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  runApp(MyApp(preferences: prefs));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final SharedPreferences preferences;
+
+  const MyApp({super.key, required this.preferences});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +34,7 @@ class MyApp extends StatelessWidget {
       providers: [
         Provider(create: (_) => SqliteService()),
         Provider(create: (_) => ApiService()),
+        Provider(create: (_) => SharedPreferencesService(preferences)),
         ChangeNotifierProvider(
           create: (context) =>
               RestaurantListProvider(context.read<ApiService>()),
@@ -42,29 +51,36 @@ class MyApp extends StatelessWidget {
           create: (context) => FavoriteProvider(context.read<SqliteService>()),
         ),
         ChangeNotifierProvider(create: (context) => HomeCategoryProvider()),
+        ChangeNotifierProvider(create: (context) => SettingProvider(context.read<SharedPreferencesService>()),)
       ],
-      child: MaterialApp(
-        title: 'Restaurant App',
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        themeMode: ThemeMode.system,
-        initialRoute: HomeScreen.routeName,
-        routes: {
-          HomeScreen.routeName: (context) => const HomeScreen(),
-          SearchScreen.routeName: (context) => const SearchScreen(),
-          FavoriteScreen.routeName: (context) => const FavoriteScreen(),
+      child: Consumer<SettingProvider>(
+        builder: (context, provider, child){
+          return MaterialApp(
+          title: 'Restaurant App',
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: provider.isDarkTheme ? ThemeMode.dark : ThemeMode.light,
+          initialRoute: HomeScreen.routeName,
+          routes: {
+            HomeScreen.routeName: (context) => const HomeScreen(),
+            SearchScreen.routeName: (context) => const SearchScreen(),
+            FavoriteScreen.routeName: (context) => const FavoriteScreen(),
+            SettingScreen.routeName: (context) => const SettingScreen(),
+          },
+          onGenerateRoute: (settings) {
+            if (settings.name == DetailScreen.routeName) {
+              final args = settings.arguments as String;
+              return MaterialPageRoute(
+                builder: (context) {
+                  return DetailScreen(restaurantId: args);
+                },
+              );
+            }
+            return null;
+          },
+        );
         },
-        onGenerateRoute: (settings) {
-          if (settings.name == DetailScreen.routeName) {
-            final args = settings.arguments as String;
-            return MaterialPageRoute(
-              builder: (context) {
-                return DetailScreen(restaurantId: args);
-              },
-            );
-          }
-          return null;
-        },
+        
       ),
     );
   }
