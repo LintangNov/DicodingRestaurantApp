@@ -14,6 +14,7 @@ import 'provider/restaurant_detail_provider.dart';
 import 'provider/restaurant_list_provider.dart';
 import 'provider/restaurant_search_provider.dart';
 import 'provider/favorite_provider.dart';
+import 'provider/description_provider.dart';
 import 'data/api/api_service.dart';
 import 'screen/home_screen.dart';
 import 'screen/search_screen.dart';
@@ -59,6 +60,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) =>
               SettingProvider(context.read<SharedPreferencesService>()),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => DescriptionProvider()
         ),
       ],
       child: Consumer<SettingProvider>(

@@ -3,6 +3,7 @@ import 'package:restaurant_app/screen/widget/error_state_widget.dart';
 import '../provider/restaurant_detail_provider.dart';
 import '../static/result_state.dart';
 import 'package:provider/provider.dart';
+import '../provider/description_provider.dart';
 import 'widget/detail_screen_widgets.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -20,6 +21,7 @@ class _DetailScreenState extends State<DetailScreen> {
   void initState() {
     super.initState();
     final provider = context.read<RestaurantDetailProvider>();
+    context.read<DescriptionProvider>().reset();
     final id = widget.restaurantId;
     Future.microtask(() {
       provider.fetchRestaurantDetail(id);

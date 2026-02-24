@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/data/local/notification_service.dart';
 import 'package:restaurant_app/provider/favorite_provider.dart';
 import 'package:restaurant_app/provider/home_category_provider.dart';
 import 'package:restaurant_app/screen/widget/home_screen_widgets.dart';
@@ -23,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Future.microtask(() {
       provider.fetchRestaurantList();
     });
+    NotificationService().requestPermission();
   }
 
   @override

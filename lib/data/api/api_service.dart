@@ -15,7 +15,9 @@ class ApiService {
     } on FormatException {
       throw Exception('Data format error');
     } catch (e) {
-      throw Exception('Failed to connect to the server. Please try again later.');
+      throw Exception(
+        'Failed to connect to the server. Please try again later.',
+      );
     }
   }
 

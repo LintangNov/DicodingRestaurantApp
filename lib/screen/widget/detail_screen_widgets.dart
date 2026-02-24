@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/data/model/restaurant_detail.dart';
 import 'package:restaurant_app/data/model/restaurant_list.dart';
+import 'package:restaurant_app/provider/description_provider.dart';
 import 'package:restaurant_app/provider/favorite_provider.dart';
 import 'package:restaurant_app/provider/restaurant_detail_provider.dart';
 
@@ -449,48 +450,44 @@ void showAddReviewDialog(BuildContext context, String restaurantId) {
   );
 }
 
-class DescriptionWidget extends StatefulWidget {
+class DescriptionWidget extends StatelessWidget {
   final String description;
 
   const DescriptionWidget({super.key, required this.description});
 
   @override
-  State<DescriptionWidget> createState() => _DescriptionWidgetState();
-}
-
-class _DescriptionWidgetState extends State<DescriptionWidget> {
-  bool _isExpanded = false;
-
-  @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          widget.description,
-          maxLines: _isExpanded ? null : 3,
-          overflow: _isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-          textAlign: TextAlign.justify,
-        ),
-        const SizedBox(height: 4),
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              _isExpanded = !_isExpanded;
-            });
-          },
-          child: Text(
-            _isExpanded ? "Show Less" : "Read More",
+    return Consumer<DescriptionProvider>(
+      builder: (context, provider, child){
+        return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            description,
+            maxLines: provider.isExpanded ? null : 3,
+            overflow: provider.isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+            textAlign: TextAlign.justify,
+          ),
+          const SizedBox(height: 4),
+          GestureDetector(
+            onTap: () {
+              provider.toggleReadMore();
+            },
+            child: Text(
+              provider.isExpanded ? "Show Less" : "Read More",
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      );
+      },
+      
     );
   }
 }

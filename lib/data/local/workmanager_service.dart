@@ -57,7 +57,6 @@ class WorkmanagerService {
       initialDelay: initialDelay,
       constraints: Constraints(networkType: NetworkType.connected),
     );
-
   }
 
   Future<void> cancelDailyReminder() async {
